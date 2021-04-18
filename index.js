@@ -1,5 +1,6 @@
 const request = require('request-promise');
 const cheerio = require('cheerio');
+const Json2csvParser = require('json2csv').Parser;
 const fs = require('fs');
 
 // const URL = 'https://www.adorocinema.com/filmes/filme-221542/';
@@ -60,8 +61,13 @@ const URLS = [
         // console.log(`genres: ${genres}`);
     }
     
-    fs.writeFileSync('./data.json', JSON.stringify(moviesData), 'utf-8');
+    const fields = ['title', 'rating', 'poster', 'totalRatings', 'releaseDate', 'genres'];
+    
+    const json2csvParser = new Json2csvParser({ fields });
+    const csv = json2csvParser.parse(moviesData); 
 
-    console.log(`moviesData: ${moviesData}`);
+    fs.writeFileSync('./data.csv', csv, 'utf-8');
+
+    console.log(csv);
     
 })()
